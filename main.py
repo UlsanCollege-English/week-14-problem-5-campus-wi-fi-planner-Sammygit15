@@ -1,39 +1,45 @@
-
-## main.py
-```python
-"""
-HW05 — Campus Wi-Fi Planner (Max Level Load in a Tree)
-
-Implement TreeNode and max_level_sum(root) to find the level with the highest
-total capacity in a binary tree.
-"""
+from collections import deque
 
 
 class TreeNode:
-    """
-    Binary tree node for Wi-Fi routers.
-
-    value: integer capacity
-    left, right: TreeNode or None
-    """
 
     def __init__(self, value, left=None, right=None):
-        # TODO: store the fields on the instance
-        pass
+        self.value = value
+        self.left = left
+        self.right = right
 
 
 def max_level_sum(root):
-    """
-    Return (best_level_index, best_sum) where best_level_index is the level
-    with the highest sum of node values, and best_sum is that sum.
+    if root is None:
+        return (None, 0)
 
-    For an empty tree (root is None), return (None, 0).
-    """
-    # TODO (8 Steps of Coding, minimal prompts):
-    # - Design a BFS (level-order) traversal using a queue.
-    # - Track current level index, sum per level, and the best level so far.
-    # - Handle the empty tree case.
-    raise NotImplementedError("Implement max_level_sum in main.py")
+    queue = deque([root])
+    level = 0
+
+    best_level = 0
+    best_sum = float('-inf')
+
+    while queue:
+        level_size = len(queue)
+        current_sum = 0
+
+        # Process one full level
+        for _ in range(level_size):
+            node = queue.popleft()
+            current_sum += node.value
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+
+        # Check if this level is the new best
+        if current_sum > best_sum:
+            best_sum = current_sum
+            best_level = level
+
+        level += 1
+
+    return (best_level, best_sum)
 
 
 if __name__ == "__main__":
